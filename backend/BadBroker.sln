@@ -8,6 +8,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadBroker.Core", "BadBroker
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadBroker.DataAccess.Psql", "BadBroker.DataAccess.Psql\BadBroker.DataAccess.Psql.csproj", "{81E5D51B-8657-4EC2-8B6B-2CCDFC70D3FE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadBroker.Application", "BadBroker.Application\BadBroker.Application.csproj", "{8CC56E80-C07D-40BC-9409-C72052A191F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadBroker.ExchangeratesIntegration", "BadBroker.ExchangeratesIntegration\BadBroker.ExchangeratesIntegration.csproj", "{58E3B800-076F-4A90-8322-73D5AF5EB54F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +34,13 @@ Global
 		{81E5D51B-8657-4EC2-8B6B-2CCDFC70D3FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81E5D51B-8657-4EC2-8B6B-2CCDFC70D3FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81E5D51B-8657-4EC2-8B6B-2CCDFC70D3FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CC56E80-C07D-40BC-9409-C72052A191F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CC56E80-C07D-40BC-9409-C72052A191F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CC56E80-C07D-40BC-9409-C72052A191F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CC56E80-C07D-40BC-9409-C72052A191F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58E3B800-076F-4A90-8322-73D5AF5EB54F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58E3B800-076F-4A90-8322-73D5AF5EB54F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58E3B800-076F-4A90-8322-73D5AF5EB54F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58E3B800-076F-4A90-8322-73D5AF5EB54F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

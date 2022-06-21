@@ -4,4 +4,15 @@
         <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\BadBroker.Application\BadBroker.Application.csproj" />
+      <ProjectReference Include="..\BadBroker.Core\BadBroker.Core.csproj" />
+      <ProjectReference Include="..\BadBroker.DataAccess.Psql\BadBroker.DataAccess.Psql.csproj" />
+      <ProjectReference Include="..\BadBroker.ExchangeratesIntegration\BadBroker.ExchangeratesIntegration.csproj" />
+    </ItemGroup>
+
 </Project>
