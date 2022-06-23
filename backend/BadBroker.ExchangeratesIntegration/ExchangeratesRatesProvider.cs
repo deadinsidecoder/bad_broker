@@ -11,7 +11,7 @@ namespace BadBroker.ExchangeratesIntegration
 {
 	public class ExchangeratesRatesProvider : IRateProvider
 	{
-		private const string API_KEY = "KaN2dYK1WQm5cr9dJUp6jYwBHIPmDJd1";
+		private const string API_KEY = "C1SWFJBDArLhJdH44uy3et5AFMRl3Zob";
 		private const string BASE_URL = "https://api.apilayer.com/exchangerates_data";
 		
 		public async Task<Rate> Get(DateTime date, Currency quoteBase, params Currency[] quoteCurrencies)

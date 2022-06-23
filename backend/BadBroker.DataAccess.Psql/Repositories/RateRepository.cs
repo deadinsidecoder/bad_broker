@@ -22,13 +22,12 @@ namespace BadBroker.DataAccess.Psql.Repositories
 		{
 			var tasks = new List<Task<Rate>>();
 			
-			for (DateTime date = from.Date; date < to.Date; date.AddDays(1))
+			for (DateTime date = from.Date; date <= to.Date; date = date.AddDays(1))
 			{
 				tasks.Add(Get(date , quoteBase, quoteCurrencies));
 			}
 
 			await Task.WhenAll(tasks);
-
 			var rates = tasks.Select(task => task.Result).ToArray();
 			return rates;
 		}
