@@ -21,10 +21,10 @@ namespace BadBroker.Application
 		public async Task<Rate[]> GetForPeriod(DateTime from, DateTime to, Currency quoteBase, Currency[] quoteCurrencies)
 		{
 			if (from > to)
-				throw new Exception("The from date is larger than to date!");
+				throw new ArgumentException("The from date is larger than to date!", nameof(from));
 
 			if (quoteCurrencies == null || quoteCurrencies.Length == 0)
-				throw new Exception("Quote currencies are empty!");
+				throw new ArgumentException("Quote currencies are empty!", nameof(quoteCurrencies));
 				
 			return await _rateRepository.GetForPeriod(from, to, quoteBase, quoteCurrencies);
 		}
@@ -39,13 +39,13 @@ namespace BadBroker.Application
 		public TradingStrategy FindBestTradingStrategy(Rate[] rates, Currency quoteBase, Currency[] quoteCurrencies, decimal tradingMoney)
 		{
 			if (tradingMoney <= 0)
-				throw new Exception("Trading money is equal to or less than zero!");
+				throw new ArgumentException("Trading money is equal to or less than zero!", nameof(tradingMoney));
 			
 			if (quoteCurrencies == null || quoteCurrencies.Length == 0)
-				throw new Exception("Quote currencies are empty!");
+				throw new ArgumentException("Quote currencies are empty!", nameof(quoteCurrencies));
 			
 			if (rates == null || rates.Length == 0)
-				throw new Exception("Rates are empty!");
+				throw new ArgumentException("Rates are empty!", nameof(rates));
 			
 			var tradingStrategies = new List<TradingStrategy>();
 			

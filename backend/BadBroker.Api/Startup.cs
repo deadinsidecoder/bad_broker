@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using BadBroker.Application;
 using BadBroker.Core;
 using BadBroker.Core.Repositories;
@@ -11,7 +7,7 @@ using BadBroker.DataAccess.Psql.Repositories;
 using BadBroker.ExchangeratesIntegration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
@@ -20,6 +16,13 @@ namespace BadBroker.Api
 {
 	public class Startup
 	{
+		private readonly IConfiguration _configuration;
+
+		public Startup(IConfiguration configuration)
+		{
+			_configuration = configuration;
+		}
+
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllers()
@@ -32,8 +35,11 @@ namespace BadBroker.Api
 			{
 				options.SwaggerDoc("v1", new OpenApiInfo{Title = "BadBroker", Version = "v1"});
 			});
+
+			var exchangeratesSection = _configuration.GetSection("ExchangeratesApi");
+			services.AddTransient<IRateProvider>(x =>
+				new ExchangeratesRatesProvider((string)exchangeratesSection.GetValue(typeof(string), "apiKey")));
 			
-			services.AddTransient<IRateProvider, ExchangeratesRatesProvider>();
 			services.AddTransient<IRateRepository, RateRepository>();
 			services.AddTransient<IRateService, RateService>();
 		}
