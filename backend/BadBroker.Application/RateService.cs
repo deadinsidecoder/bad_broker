@@ -51,36 +51,51 @@ namespace BadBroker.Application
 			
 			foreach (var quoteCurrency in quoteCurrencies)
 			{
-				var maxRate = rates
-					.OrderByDescending(x => x.QuoteCurrenciesValues[quoteCurrency])
-					.First();
+				var strategy = FindBestTradingStrategyForCurrency(rates, quoteBase, quoteCurrency, tradingMoney);
+				tradingStrategies.Add(strategy);
+			}
 
-				TradingStrategy tradingStrategy = new(maxRate.Date, maxRate.Date, quoteBase, quoteCurrency, 0);
+			return tradingStrategies.OrderByDescending(x => x.Revenue).First();
+		}
 
-				for (DateTime date = maxRate.Date.AddDays(1); date < rates.Max(x => x.Date).Date; date = date.AddDays(1))
+
+		private TradingStrategy FindBestTradingStrategyForCurrency(Rate[] rates, Currency quoteBase, Currency quoteCurrency, decimal tradingMoney)
+		{
+			var minDate = rates.Min(x => x.Date).Date;
+			var maxDate = rates.Max(x => x.Date).Date;
+
+			TradingStrategy tradingStrategy = new(minDate, minDate, quoteBase, quoteCurrency, 0);
+
+			for (DateTime buyDate = minDate; buyDate <= maxDate; buyDate = buyDate.AddDays(1))
+			{
+				var buyRate = rates.FirstOrDefault(x => x.Date.Date == buyDate);
+				
+				if(buyRate == null)
+					continue;
+				
+				for (DateTime sellDate = buyDate.AddDays(1); sellDate <= maxDate; sellDate = sellDate.AddDays(1))
 				{
-					var daysAfterBuy = (date - maxRate.Date).Days;
-					var currentRate = rates.FirstOrDefault(x => x.Date.Date == date);
+					var daysAfterBuy = (sellDate - buyDate).Days;
+					var sellRate = rates.FirstOrDefault(x => x.Date.Date == sellDate);
 
-					if(currentRate == null)
+					if(sellRate == null)
 						continue;
 					
-					var moneyAfterSell = maxRate.QuoteCurrenciesValues[quoteCurrency] * tradingMoney /
-						currentRate.QuoteCurrenciesValues[quoteCurrency] - daysAfterBuy;
+					var moneyAfterSell = buyRate.QuoteCurrenciesValues[quoteCurrency] * tradingMoney /
+						sellRate.QuoteCurrenciesValues[quoteCurrency] - daysAfterBuy;
 					
 					var revenue = moneyAfterSell - tradingMoney;
 					
 					if (revenue > tradingStrategy.Revenue)
 					{
-						tradingStrategy.SellDate = date;
+						tradingStrategy.BuyDate = buyDate;
+						tradingStrategy.SellDate = sellDate;
 						tradingStrategy.Revenue = revenue;
 					}
 				}
-				
-				tradingStrategies.Add(tradingStrategy);
 			}
 
-			return tradingStrategies.OrderByDescending(x => x.Revenue).First();
+			return tradingStrategy;
 		}
 	}
 }
