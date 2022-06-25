@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using BadBroker.Api.Contracts;
 using BadBroker.Core.Enums;
 using BadBroker.Core.Services;
@@ -13,18 +14,20 @@ namespace BadBroker.Api.Controllers
 	public class RatesController : ControllerBase
 	{
 		private readonly IRateService _rateService;
+		private readonly IMapper _mapper;
 
-		public RatesController(IRateService rateService)
+		public RatesController(IRateService rateService, IMapper mapper)
 		{
 			_rateService = rateService;
+			_mapper = mapper;
 		}
 
 		[HttpGet]
 		[Route("best")]
 		public async Task<IActionResult> GetBest(DateTime startDate, DateTime endDate, decimal moneyUsd)
 		{
-			if (endDate > startDate)
-				return BadRequest("The end date cannot be greater than the start date!");
+			if (startDate > endDate)
+				return BadRequest("The start date cannot be greater than the end date!");
 
 			if(startDate.Year < 1999 || endDate.Year < 1999)
 				return BadRequest("No data before 1999");
@@ -44,24 +47,10 @@ namespace BadBroker.Api.Controllers
 				BuyDate = bestStrategy.BuyDate,
 				SellDate = bestStrategy.SellDate,
 				Tool = bestStrategy.QuoteCurrency,
-				Revenue = bestStrategy.Revenue
+				Revenue = bestStrategy.Revenue,
+				Rates = _mapper.Map<Core.Models.Rate[], Rate[]>(rates)
 			};
 
-			var responseRates = new List<Rate>();
-			foreach (var rate in rates)
-			{
-				var responseRate = new Rate
-				{
-					Date = rate.Date,
-					Eur = rate.QuoteCurrenciesValues[Currency.EUR],
-					Gbp = rate.QuoteCurrenciesValues[Currency.GBP],
-					Jpy = rate.QuoteCurrenciesValues[Currency.JPY],
-					Rub = rate.QuoteCurrenciesValues[Currency.RUB]
-				};
-
-				responseRates.Add(responseRate);
-			}
-			response.Rates = responseRates.ToArray();
 			return Ok(response);
 		}
 	}

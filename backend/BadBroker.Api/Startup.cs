@@ -3,10 +3,12 @@ using BadBroker.Application;
 using BadBroker.Core;
 using BadBroker.Core.Repositories;
 using BadBroker.Core.Services;
+using BadBroker.DataAccess.Psql;
 using BadBroker.DataAccess.Psql.Repositories;
 using BadBroker.ExchangeratesIntegration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -36,6 +38,11 @@ namespace BadBroker.Api
 				options.SwaggerDoc("v1", new OpenApiInfo{Title = "BadBroker", Version = "v1"});
 			});
 
+			services.AddAutoMapper(typeof(ApiProfile));
+
+			var connectionString = _configuration.GetConnectionString("DefaultConnection");
+			services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(connectionString), ServiceLifetime.Transient);
+			
 			var exchangeratesSection = _configuration.GetSection("ExchangeratesApi");
 			services.AddTransient<IRateProvider>(x =>
 				new ExchangeratesRatesProvider((string)exchangeratesSection.GetValue(typeof(string), "apiKey")));

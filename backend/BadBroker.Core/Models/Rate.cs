@@ -8,6 +8,6 @@ namespace BadBroker.Core.Models
 	{
 		public DateTime Date { get; set; }
 		public Currency QuoteBase { get; set; }
-		public Dictionary<Currency, decimal> QuoteCurrenciesValues { get; set; }
+		public Dictionary<Currency, decimal> QuoteCurrenciesValues { get; set; } = new();
 	}
 }

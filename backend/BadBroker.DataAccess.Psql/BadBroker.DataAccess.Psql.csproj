@@ -7,11 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Entities" />
+      <ProjectReference Include="..\BadBroker.Core\BadBroker.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\BadBroker.Core\BadBroker.Core.csproj" />
+      <PackageReference Include="AutoMapper" Version="11.0.1" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.17" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.10" />
     </ItemGroup>
 
 </Project>
