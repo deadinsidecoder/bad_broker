@@ -8,6 +8,7 @@
         <n-date-picker type="daterange" 
             :value="range"
             updateValueOnClose
+            :status="datePickerState"
             @confirm="setRange"
         />
         <n-button type="primary" attrType="submit" @click="submit">
@@ -19,12 +20,13 @@
 </template>
 
 <script>
-import { NDatePicker, NButton, NInputNumber, NIcon } from 'naive-ui'
+import { NDatePicker, NButton, NInputNumber, NIcon, useMessage  } from 'naive-ui'
 
 export default {
     setup(){
         return {
             moneyValidator: (x) => x > 0,
+            message: useMessage()
         }
     },
 
@@ -35,11 +37,18 @@ export default {
         return {
             range: [startDate, endDate],
             money: 100,
+            datePickerState: ''
         }
     },
 
     methods: {
         setRange(range){
+            const days = (range[1] - range[0]) / 1000 / 60 / 60 / 24;
+            if(days > 60){
+                this.message.error('The range cannot be more than two months!');
+                return;
+            } 
+
             this.range = range;
         },
 
@@ -52,6 +61,8 @@ export default {
                 startDate: new Date(this.range[0]),
                 endDate: new Date(this.range[1]),
                 money: this.money
+            }).catch(error => {
+                this.message.error(error.message);
             });
         }
     },

@@ -33,6 +33,16 @@ namespace BadBroker.Api
 					options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 				});
 			
+			services.AddCors(options =>
+			{
+				options.AddPolicy(name: "DEFAULT", builder =>
+				{
+					builder.AllowAnyOrigin();
+					builder.AllowAnyHeader();
+					builder.AllowAnyMethod();
+				});
+			});
+			
 			services.AddSwaggerGen(options =>
 			{
 				options.SwaggerDoc("v1", new OpenApiInfo{Title = "BadBroker", Version = "v1"});
@@ -65,6 +75,8 @@ namespace BadBroker.Api
 			}
 
 			app.UseRouting();
+			
+			app.UseCors("DEFAULT");
 
 			app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 		}

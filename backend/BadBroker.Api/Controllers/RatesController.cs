@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using BadBroker.Api.Contracts;
@@ -26,14 +25,17 @@ namespace BadBroker.Api.Controllers
 		[Route("best")]
 		public async Task<IActionResult> GetBest(DateTime startDate, DateTime endDate, decimal moneyUsd)
 		{
+			if(startDate.Year < 1999 || endDate.Year < 1999)
+				return BadRequest("No data before 1999");
+			
 			if (startDate > endDate)
 				return BadRequest("The start date cannot be greater than the end date!");
 
-			if(startDate.Year < 1999 || endDate.Year < 1999)
-				return BadRequest("No data before 1999");
-
 			if(endDate.Date > DateTime.Now.Date)
 				return BadRequest("The end date cannot be greater than it is now!");
+			
+			if((startDate - endDate).Days > 60)
+				return BadRequest("The range cannot be more than two months!");
 			
 			if(moneyUsd <= 0)
 				return BadRequest("The money cannot be less than or equal to zero!");

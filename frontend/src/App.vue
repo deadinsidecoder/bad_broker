@@ -1,16 +1,18 @@
 <template>
     <n-config-provider :theme="darkTheme">
-        <div class="logo">
-            <h1>Bad broker</h1>
-        </div>
-        <Form/>
-        <rates-chart class="chart"/>
-        <best-strategy class="best-strategy"/>
+        <n-message-provider>
+            <div class="logo">
+                <h1>Bad broker</h1>
+            </div>
+            <Form/>
+            <rates-chart class="chart"/>
+            <best-strategy class="best-strategy"/>
+        </n-message-provider>
     </n-config-provider>
 </template>
 
 <script>
-import { NConfigProvider, darkTheme } from 'naive-ui'
+import { NConfigProvider, NMessageProvider, darkTheme } from 'naive-ui'
 import Form from './components/form'
 import RatesChart from './components/ratesChart'
 import BestStrategy from './components/bestStrategy'
@@ -26,6 +28,7 @@ export default {
 
     components: {
         NConfigProvider,
+        NMessageProvider,
         Form,
         RatesChart,
         BestStrategy

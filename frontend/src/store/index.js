@@ -30,10 +30,15 @@ export default createStore({
 
             const url = `http://localhost:5000/rates/best?startDate=${start}&endDate=${end}&moneyUsd=${money}`;
             return fetch(url).then(response => {
+
+                if(!response.ok)
+                {
+                    const message = `An error has occured: ${response.status}`;
+                    throw new Error(message)
+                }
+
                 return response.json()
             }).then(response => {   
-                console.log(response)
-
                 const strategy = {
                     buyDate: response.buyDate,
                     sellDate: response.sellDate,
